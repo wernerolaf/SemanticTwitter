@@ -1,0 +1,9 @@
+name: semantic-twitter
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - pip
+  - spacy
+  - pip:
+    - pywikibot
