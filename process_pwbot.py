@@ -22,10 +22,15 @@ def prettyPrint(variable):
 site = pywikibot.Site("wikidata", "wikidata")
 #repo = site.data_repository()
 #token = repo.token(pywikibot.Page(repo, 'Main Page'), 'edit')
-wikidataEntries = getItems(site, "Google")
-# Print the different Wikidata entries to the screen
-prettyPrint(wikidataEntries)
 
-# Print each wikidata entry as an object
-#for wdEntry in wikidataEntries["search"]:
-#   prettyPrint(getItem(site, wdEntry["id"], token))
+def getEntries(itemtitle):
+    return getItems(site, itemtitle)
+
+def example():
+    wikidataEntries = getEntries("Google")
+    # Print the different Wikidata entries to the screen
+    prettyPrint(wikidataEntries)
+
+    # Print each wikidata entry as an object
+    #for wdEntry in wikidataEntries["search"]:
+    #    prettyPrint(getItem(site, wdEntry["id"], token))
