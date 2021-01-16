@@ -5,6 +5,7 @@ channels:
 dependencies:
   - autopep8
   - pip
+  - selenium
   - spacy
   - pip:
     - pywikibot

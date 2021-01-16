@@ -1,17 +1,7 @@
 from selenium import webdriver, common
 from selenium.webdriver.common.keys import Keys
 import time
-
-try:
-    f=open("/home/olaf/twitterPassword","r")
-    f.readline()
-    ACCOUNT = f.readline().strip()
-    f.readline()
-    PASSWORD = f.readline().strip()
-except:
-    print("no file found")
-finally:
-    f.close()
+import config
 
 driver = webdriver.Firefox()
 driver.get("https://twitter.com/")
@@ -29,8 +19,8 @@ except common.exceptions.NoSuchElementException:
 
 email.clear()
 password.clear()
-email.send_keys(ACCOUNT)
-password.send_keys(PASSWORD)
+email.send_keys(config.ACCOUNT)
+password.send_keys(config.PASSWD)
 password.send_keys(Keys.RETURN)
 time.sleep(4)
 tweet=driver.find_elements_by_xpath("//*[contains(text(), 'unique_tweet_to_color')]")
