@@ -8,3 +8,4 @@ dependencies:
   - spacy
   - pip:
     - pywikibot
+    - twitter
