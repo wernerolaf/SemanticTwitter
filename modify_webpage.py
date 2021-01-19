@@ -1,3 +1,4 @@
+import pickle
 from selenium import webdriver, common
 from selenium.webdriver.common.keys import Keys
 import time
@@ -5,25 +6,37 @@ from random import uniform
 import config
 
 driver = webdriver.Firefox()
-driver.get("https://twitter.com/login")
 
+def revisit():
+    driver.get("https://twitter.com")
+    cookies = pickle.load(open("cookies.pkl", "rb"))
+    for cookie in cookies:
+        driver.add_cookie(cookie)
 
-time.sleep(4)
+def visit():
+    driver.get("https://twitter.com/login")
+    time.sleep(4)
 
-try:
-    email = driver.find_element_by_name('session[username_or_email]')
-    password = driver.find_element_by_name('session[password]')
-except common.exceptions.NoSuchElementException:
-    time.sleep(3)
-    email = driver.find_element_by_name('session[username_or_email]')
-    password = driver.find_element_by_name('session[password]')
+    try:
+        email = driver.find_element_by_name('session[username_or_email]')
+        password = driver.find_element_by_name('session[password]')
+    except common.exceptions.NoSuchElementException:
+        time.sleep(3)
+        email = driver.find_element_by_name('session[username_or_email]')
+        password = driver.find_element_by_name('session[password]')
 
-email.clear()
-password.clear()
-email.send_keys(config.ACCOUNT)
-password.send_keys(config.PASSWD)
-password.send_keys(Keys.RETURN)
-time.sleep(uniform(4, 8))
+    email.clear()
+    password.clear()
+    email.send_keys(config.ACCOUNT)
+    password.send_keys(config.PASSWD)
+    password.send_keys(Keys.RETURN)
+    time.sleep(uniform(4, 8))
+
+    # dump cookies
+    pickle.dump(driver.get_cookies(), open("cookies.pkl", "wb"))
+
+# visit()
+revisit()
 
 # div:
 # css-901oao r-jwli3a r-1qd0xha r-a023e6 r-16dba41 r-ad9z0x r-bcqeeo r-bnwqim r-qvutc0
