@@ -59,10 +59,12 @@ sleep()
 # div:
 # css-901oao r-jwli3a r-1qd0xha r-a023e6 r-16dba41 r-ad9z0x r-bcqeeo r-bnwqim r-qvutc0
 
-# xpath = "/html/body/div/div/div/div/main/div/div/div/div/div/div/div/div/section/div/div/div/div/div/article/div/div/div/div/div/div/div/div/span"
-# tweets1 = driver.find_elements_by_xpath(xpath)
+xpath = "/html/body/div/div/div/div/main/div/div/div/div/div/div/div/div/section/div/div/div/div/div/article/div/div/div/div/div/div/div/div"
+
+tweets = driver.find_elements_by_xpath(xpath)
 # tweets2 = driver.find_elements_by_css_selector("span .css-901oao.css-16my406.r-poiln3.r-bcqeeo.r-qvutc0")
-tweets = driver.find_elements_by_css_selector("div .css-901oao.r-jwli3a.r-1qd0xha.r-a023e6.r-16dba41.r-ad9z0x.r-bcqeeo.r-bnwqim.r-qvutc0")
+#tweets = driver.find_elements_by_css_selector("div .css-901oao.r-jwli3a.r-1qd0xha.r-a023e6.r-16dba41.r-ad9z0x.r-bcqeeo.r-bnwqim.r-qvutc0")
+#                                                  .css-901oao.r-18jsvk2.r-1qd0xha.r-a023e6.r-16dba41.r-ad9z0x.r-bcqeeo.r-bnwqim.r-qvutc0
 
 texts = [tweet.text for tweet in tweets]
 print(texts[0])
