@@ -1,5 +1,6 @@
 # Twitter API config
 config.py
+cookies.pkl
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
