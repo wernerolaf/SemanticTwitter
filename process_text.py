@@ -11,18 +11,27 @@ example_text = ("Governor @BrianKempGA and his puppet @GeoffDuncanGA, together w
 def processText(text):
     print(text + "\n")
     ents = getEntities(text)
-    lemmas = [ent.lemma_ for ent in ents]
-    entrs = [getEntries(lem) for lem in lemmas]
-    # print(entrs[0])
+    ents_metas = {ent: get_meta(ent) for ent in ents}
+    ents_metas = {k: v for k, v in ents_metas.items() if v is not None}
+    return ents_metas
 
-    for entr in entrs:
-        print(entr['searchinfo']['search'])
-        for s in entr['search']:
-            if 'description' in s:
-                print("  " + s['description'])
-            elif 'title' in s:
-                print("  " + s['title'])
-            else:
-                print("  __other")
+
+def get_meta(entity):
+    lemma = entity.lemma_
+    entr = getEntries(lemma)
+
+    wiki_results = [] ## multiple wiki results (like Georgia state and Georgia country)
+    print(entr['searchinfo']['search'])
+    for s in entr['search']:
+        wiki_results.append(s)
+        if 'description' in s:
+            print("  " + s['description'])
+        elif 'title' in s:
+            print("  " + s['title'])
+        else:
+            print("  __other")
+        # return s # single wiki result
+    return wiki_results
+
 
 processText(example_text)
