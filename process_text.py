@@ -34,4 +34,3 @@ def get_meta(entity):
     return wiki_results
 
 
-processText(example_text)

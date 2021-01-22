@@ -3,6 +3,8 @@ from selenium.webdriver.common.keys import Keys
 import time
 import config
 from twitter import Twitter, OAuth
+from process_text import processText
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
 # set driver
 driver = webdriver.Firefox()
 driver.get("https://twitter.com/")
@@ -35,9 +37,31 @@ auth = OAuth(
 t = Twitter(auth=auth)
 
 # find and modify your tweets
+print(t.statuses.home_timeline())
 for tweet_to_modify in t.statuses.home_timeline():
-    tweet = driver.find_elements_by_xpath("//*[contains(text(), '{}')]".format(tweet_to_modify["text"]))
+    text=tweet_to_modify["text"]
+    time.sleep(12)
+    tweet = driver.find_elements_by_xpath("//*[contains(text(), '{}')]".format(text))
 
-    #driver.execute_script("arguments[0].style.color = 'lightblue'", tweet[0])
-    driver.execute_script("arguments[0].style.color = 'blue'", tweet[0])
-    driver.execute_script("arguments[0].innerHTML = 'magicmagic'", tweet[0])
+#sentiment
+    score = SentimentIntensityAnalyzer().polarity_scores(text)
+    neg = score['neg']
+    neu = score['neu']
+    pos = score['pos']
+    if neg > pos and neg > neu:
+        driver.execute_script("arguments[0].style.color = 'red'", tweet[0])
+        print("negative")
+    elif pos > neu:
+        driver.execute_script("arguments[0].style.color = 'green'", tweet[0])
+        print("positive")
+    else:
+        print("neutral")
+
+#wikidata entities
+    analyze=processText(text)
+    for key in analyze:
+        if len(analyze[key]) > 0:
+            link="<a href =\"https:{}\">{}</a>".format(analyze[key][0]["url"], key)
+            text=text.replace(str(key),str(link))
+
+    driver.execute_script("arguments[0].innerHTML = '{}'".format(text), tweet[0])

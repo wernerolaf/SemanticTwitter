@@ -8,8 +8,9 @@ example_text = "Governor @BrianKempGA and his puppet @GeoffDuncanGA, together wi
                "able to win on January 5th. unless these people allow Signature Verification in presidential race.K & " \
                "D need it for their race also, & Georgia spirit will rise to such a high that they will easily bring " \
                "home a great victory. Move fast @BrianKempGA "
+example_text2="Opole is a great city. I like it. Positive twit should be green."
 
-score = SentimentIntensityAnalyzer().polarity_scores(example_text)
+score = SentimentIntensityAnalyzer().polarity_scores(example_text2)
 neg = score['neg']
 neu = score['neu']
 pos = score['pos']
