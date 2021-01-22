@@ -5,27 +5,48 @@ import config
 from twitter import Twitter, OAuth
 from process_text import processText
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
+import pickle
+from random import uniform
 # set driver
 driver = webdriver.Firefox()
-driver.get("https://twitter.com/")
-time.sleep(4)
 
 
 # login
-try:
-    email = driver.find_element_by_name('session[username_or_email]')
-    password = driver.find_element_by_name('session[password]')
-except common.exceptions.NoSuchElementException:
-    time.sleep(3)
-    email = driver.find_element_by_name('session[username_or_email]')
-    password = driver.find_element_by_name('session[password]')
+def sleep():
+    time.sleep(uniform(4, 8))
 
-email.clear()
-password.clear()
-email.send_keys(config.ACCOUNT)
-password.send_keys(config.PASSWD)
-password.send_keys(Keys.RETURN)
-time.sleep(4)
+def revisit():
+    driver.get("https://twitter.com")
+    cookies = pickle.load(open("cookies.pkl", "rb"))
+    for cookie in cookies:
+        driver.add_cookie(cookie)
+
+def visit():
+    driver.get("https://twitter.com/login")
+    sleep()
+
+    try:
+        email = driver.find_element_by_name('session[username_or_email]')
+        password = driver.find_element_by_name('session[password]')
+    except common.exceptions.NoSuchElementException:
+        sleep()
+        email = driver.find_element_by_name('session[username_or_email]')
+        password = driver.find_element_by_name('session[password]')
+
+    email.clear()
+    password.clear()
+    email.send_keys(config.ACCOUNT)
+    password.send_keys(config.PASSWD)
+    password.send_keys(Keys.RETURN)
+    sleep()
+
+    # dump cookies
+    pickle.dump(driver.get_cookies(), open("cookies.pkl", "wb"))
+
+#visit()
+revisit()
+sleep()
+
 
 auth = OAuth(
     consumer_key=config.API_KEY,
@@ -40,7 +61,6 @@ t = Twitter(auth=auth)
 print(t.statuses.home_timeline())
 for tweet_to_modify in t.statuses.home_timeline():
     text=tweet_to_modify["text"]
-    time.sleep(12)
     tweet = driver.find_elements_by_xpath("//*[contains(text(), '{}')]".format(text))
 
 #sentiment
